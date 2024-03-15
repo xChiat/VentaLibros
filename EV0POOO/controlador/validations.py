@@ -41,7 +41,35 @@ def validateBuscarLibro(id):
         return None
     else:
         return result
+
+def obtenerLibroMasVendido():
+    libro_dto = LibroDTO()
+    libro, total_ventas = libro_dto.obtenerLibroMasVendido()
+    if libro:
+        print(f"Nombre: {libro.getNombre()} || Precio Unitario: {libro.getPrecio()} || Total de Ventas: {total_ventas}")
+    else:
+        print("No hay ventas registradas.")
+        
+def obtenerRecaudacionPorLibro():
+    libro_dto = LibroDTO()
+    resultados = libro_dto.obtenerRecaudacionPorLibro()
+    if resultados:
+        for resultado in resultados:
+            nombre_libro, recaudacion = resultado
+            print(f"Nombre del Libro: {nombre_libro} || Recaudación: {recaudacion}")
+    else:
+        print("No hay ventas registradas.")
+
+def validarPorcentajeVentasPorLibro():
+    vnt_dto = VentasDTO()  # Instancia de VentasDTO
+    libro_dto = LibroDTO()  # Instancia de LibroDTO
+    recaudacion_por_libro = libro_dto.obtenerRecaudacionPorLibro()  # Obtener recaudación por libro
+    porcentajes = vnt_dto.obtenerPorcentajeVentasPorLibro()  # Obtener porcentaje de ventas por libro
     
+    print("Porcentaje de ventas por libro:")
+    for libro, porcentaje in porcentajes.items():
+        print(f"Nombre del Libro: {libro} || Porcentaje de ventas: {porcentaje:.2f}%")
+        
 #---------- VENTAS -----------
 def validateFindAllVentas():
     print("\n----------------------")
@@ -161,11 +189,11 @@ def inicial():
                 if opc == 1:
                     validateFindAllLibros()
                 elif opc == 2:
-                    LibroDTO().obtenerLibroMasVendido() 
+                    obtenerLibroMasVendido()
                 elif opc == 3:
-                    LibroDTO().calcularRecaudacionLibros() 
+                    obtenerRecaudacionPorLibro() 
                 elif opc == 4:
-                    VentasDTO().calcularPorcentajeVentasDeCadaLibro() 
+                    validarPorcentajeVentasPorLibro() 
                 else:
                     break    
         elif opc == 2:

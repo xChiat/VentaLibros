@@ -40,9 +40,17 @@ class VentasDTO:
         self.syncListaVentas()
         return resultado
 
-    def calcularPorcentajeVentasDeCadaLibro(self):
-        ventas = Venta().getListaVenta()
-        total_ventas = sum(venta.getCantidad() for venta in ventas)
-        for venta in ventas:
-            porcentaje = (venta.getCantidad() / total_ventas) * 100
-            print(f"Nombre: {venta.getNomLibro()} || Cantidad Ejemplares Vendidos: {venta.getCantidad()} || Porcentaje: {porcentaje}%")
+    def obtenerRecaudacionPorLibro(self):
+        recaudaciones = VentasDAO().RecaudacionPorLibro()
+        recaudaciones_dict = {nombre_libro: recaudacion for nombre_libro, recaudacion in recaudaciones}
+        return recaudaciones_dict
+
+    def obtenerRecaudacionTotal(self):
+        recaudaciones = self.obtenerRecaudacionPorLibro()
+        return sum(recaudaciones.values())
+
+    def obtenerPorcentajeVentasPorLibro(self):
+        recaudaciones = self.obtenerRecaudacionPorLibro()
+        total_recaudacion = self.obtenerRecaudacionTotal()
+        porcentajes = {nombre_libro: (recaudacion / total_recaudacion) * 100 for nombre_libro, recaudacion in recaudaciones.items()}
+        return porcentajes

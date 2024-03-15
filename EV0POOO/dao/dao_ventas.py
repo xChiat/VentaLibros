@@ -27,7 +27,36 @@ class VentasDAO():
             if c.getConex().is_connected():
                 c.closeConex()
         return result
-  
+    
+    def LibroMasVendido(self):
+        sql = "SELECT IDLIBRO, SUM(TOTAL) AS TotalVentas FROM VENTAS GROUP BY IDLIBRO ORDER BY TotalVentas DESC LIMIT 1;"
+        c = self.getConex()
+        result = None
+        try:
+            cursor = c.getConex().cursor()
+            cursor.execute(sql)
+            result = cursor.fetchone()
+        except Exception as ex:
+            print(traceback.print_exc())
+        finally:
+            if c.getConex().is_connected():
+                c.closeConex()
+        return result
+    
+    def RecaudacionPorLibro(self):
+        sql = "SELECT Ventas.libro AS NombreLibro , SUM(TOTAL) AS Recaudacion FROM VENTAS GROUP BY IDLIBRO ORDER BY Recaudacion;"
+        c = self.getConex()
+        result = None
+        try:
+            cursor = c.getConex().cursor()
+            cursor.execute(sql)
+            result = cursor.fetchall()
+        except Exception as ex:
+            print(traceback.print_exc())
+        finally:
+            if c.getConex().is_connected():
+                c.closeConex()
+        return result
     
     def agregarVenta(self,venta):
         sql = "insert into VENTAS (NUMVENTA, IDLIBRO, LIBRO, CANTIDAD, TOTAL) values (null,%s,%s,%s,%s)"
@@ -50,7 +79,7 @@ class VentasDAO():
         return mensaje
     
     def eliminarVenta(self, venta):
-        sql = "delete from VENTA where NUMVENTA = %s"
+        sql = "delete from VENTAS where NUMVENTA = %s"
         c = self.getConex()
         mensaje = ""
         try:

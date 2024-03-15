@@ -42,7 +42,7 @@ class Venta:
             self.__listaVentas.append(vnt)
             
     def buscarVenta(self,numventa):
-        for vnt in self.getLista():
+        for vnt in self.getListaVenta():
             if vnt.getNumVenta() == numventa:
                 return vnt
         return None
